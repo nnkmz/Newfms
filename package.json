@@ -1,0 +1,45 @@
+{
+  "name": "diba-ai-memory-helper",
+  "version": "1.0.0",
+  "description": "DIBA - Learning AI Memory Helper: Dynamic, Intelligent, Brain-like, Adaptive assistant",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "diba",
+    "ai",
+    "memory",
+    "learning",
+    "assistant",
+    "diba-memory"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "diba-ai-memory-helper": "file:"
+  }
+}
