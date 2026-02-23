@@ -1,0 +1,51 @@
+---
+description: Piawaian pro developer untuk modul DIBA (src/diba)
+globs: src/diba/**/*.ts
+alwaysApply: false
+---
+
+# DIBA Pro Standards
+
+Gunakan piawaian ini apabila mengedit fail dalam `src/diba/`.
+
+## Pelbagai bahasa kod
+
+DIBA boleh guna pelbagai bahasa pengaturcaraan (TypeScript, JavaScript, Python, Go, Rust, dll.). Memori (`learn`/`recall`) dan konteks adalah language-agnostic — guna `tags`/`context` untuk nyatakan bahasa jika perlu.
+
+## TypeScript
+
+- Tiada `any`; guna `unknown` jika nilai generik.
+- Import jenis dari `./types.js`; jangan duplikat interface.
+- Guna extension `.js` dalam import ESM: `from "./memory.js"`.
+
+## API & Fail
+
+- Jenis awam: definisi dalam `types.ts`, eksport dari `index.ts`.
+- Pilihan: objek options dengan JSDoc (cth. `DibaOptions`, `LearnInput`).
+- Method async untuk I/O/persist; method sync untuk get/intro.
+
+## Memori
+
+- `learn`: upsert ikut `key`; kekalkan `id`, `createdAt`, `accessCount` bila update.
+- `recall`: filter key/context/tags/value (case-insensitive), susun ikut `updatedAt` desc.
+- Persist: pilihan; `node:fs/promises`; load pada init, catch ralat dan mulakan kosong.
+
+## Contoh elak
+
+```ts
+// ❌ Elak: any
+function bad(x: any) {}
+
+// ✅ Guna: unknown atau jenis tepat
+function good(x: unknown) {}
+```
+
+```ts
+// ❌ Elak: import tanpa .js
+import { Diba } from "./Diba";
+
+// ✅ Guna: .js untuk ESM
+import { Diba } from "./Diba.js";
+```
+
+Selepas ubah suai, jalankan `npm run build` dan pastikan tiada ralat.

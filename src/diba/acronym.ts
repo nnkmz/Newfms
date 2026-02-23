@@ -66,6 +66,6 @@ export function getDibaAcronymSummary(): {
     acronym: "DIBA",
     capabilities: DIBA_ACRONYM,
     summaryMs:
-      "Diba ialah Pembantu Memori AI Pembelajaran: Dynamic Learning, Intelligent Recall, Brain-like Memory, Adaptive Assistant.",
+      "Diba ialah Pembantu Memori AI Pembelajaran: Dynamic Learning, Intelligent Recall, Brain-like Memory, Adaptive Assistant. Boleh guna pelbagai bahasa kod (multi-language).",
   };
 }

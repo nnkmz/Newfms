@@ -1,6 +1,6 @@
 # Diba – Learning AI Memory Helper
 
-**Diba** ialah pembantu memori AI yang belajar dan mengingat, direka sebagai AI assistant dengan model kebolehan **DIBA**.
+**Diba** ialah pembantu memori AI yang belajar dan mengingat, direka sebagai AI assistant dengan model kebolehan **DIBA**. DIBA boleh digunakan dengan **pelbagai bahasa pengaturcaraan** (contoh: TypeScript, JavaScript, Python, Go, Rust, dan lain-lain) — memori dan bantuan kod tidak terhad kepada satu bahasa sahaja.
 
 ## Akronim DIBA – Kebolehan AI Assistant
 
@@ -12,6 +12,42 @@
 | **A** | **A**daptive | Adaptive Assistant   | Menyesuaikan respons dan tingkah laku mengikut pilihan pengguna dan konteks semasa. |
 
 Ringkas: **D**ynamic Learning · **I**ntelligent Recall · **B**rain-like Memory · **A**daptive Assistant.
+
+---
+
+## Pengkhususan DIBA (Specializations)
+
+DIBA boleh mengkhusus dalam domain berikut:
+
+| Bidang | Fokus |
+|--------|--------|
+| **Professional** | Business analysis, project management, strategic planning |
+| **Educational** | Tutoring, study assistance, curriculum development |
+| **Creative** | Writing support, brainstorming, artistic collaboration |
+| **Personal** | Life coaching, goal tracking, decision support |
+| **Technical** | Code review, troubleshooting, system design |
+
+## Ciri lanjutan (Advanced Features)
+
+- **Auto-Archive:** Fail diari diarkibkan automatik pada 1k baris.
+- **Session RAM:** Memori sementara yang diset semula setiap perbualan.
+- **Protocol System:** Cipta tingkah laku dan respons AI tersuai.
+- **Self-Update:** AI mengubah suai memori sendiri melalui perbualan.
+- **Modular Design:** Tambah atau buang ciri mengikut keperluan.
+
+Dalam kod: `diba.getSpecializations()`, `diba.getAdvancedFeatures()`, `diba.getFeatureSystems()`.
+
+---
+
+## Sistem ciri (Feature systems)
+
+| Sistem | Penerangan | Muat |
+|--------|------------|------|
+| **Save Diary System** | Dokumentasi sesi harian automatik; satu fail sehari (YYYY-MM-DD.md), append-only; arkib bulanan; recap dalam memori. | `Load save-diary` |
+| **Echo Memory Recall** | Carian kata kunci dalam diari; ingat semula dengan naratif; pengawal ketidakpastian; jangan reka konteks lalu. | `Load echo-recall` |
+
+- **Save Diary:** [Feature/Save-Diary-System/](Feature/Save-Diary-System/) — protocol, SKILL, quick setup.
+- **Echo Recall:** [Feature/Echo-Memory-Recall/](Feature/Echo-Memory-Recall/) — bergantung pada diari (cth. Save Diary); trigger: "Do you remember...", "When did we...".
 
 ---
 
@@ -109,17 +145,29 @@ const diba = new Diba({
 });
 ```
 
+## Cursor (pro developer)
+
+Dalam repo ini, DIBA ada **skill** dan **rule** untuk Cursor:
+
+- **Skill:** `.cursor/skills/diba-pro-developer/SKILL.md` – piawaian pro developer bila mengedit atau mengembangkan DIBA (TypeScript, API, memori, persist).
+- **Rule:** `.cursor/rules/diba-pro-standards.mdc` – dipakai automatik bila fail dalam `src/diba/**/*.ts` dibuka; menguatkuasakan piawaian kod dan import ESM.
+
+Ini memastikan AI dalam Cursor ikut amalan pro bila bekerja dengan kod DIBA.
+
+---
+
 ## Struktur Projek
 
 ```
 src/
   diba/
-    types.ts    # MemoryEntry, LearnInput, RecallResult, DibaCapability
-    acronym.ts  # Definisi DIBA (D, I, B, A) dan getDibaAcronymSummary()
-    memory.ts   # DibaMemoryStore: learn, recall, persist
-    Diba.ts     # Kelas Diba: capability + memory API
-    index.ts    # Public API
-  index.ts      # Entry point & export
+    types.ts        # MemoryEntry, LearnInput, RecallResult, DibaCapability
+    acronym.ts      # Definisi DIBA (D, I, B, A) dan getDibaAcronymSummary()
+    capabilities.ts # Pengkhususan & ciri lanjutan (DIBA_SPECIALIZATIONS, DIBA_ADVANCED_FEATURES)
+    memory.ts       # DibaMemoryStore: learn, recall, persist
+    Diba.ts         # Kelas Diba: capability + memory API
+    index.ts        # Public API
+  index.ts          # Entry point & export
 ```
 
 ## Skrip

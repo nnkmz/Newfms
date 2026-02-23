@@ -4,6 +4,11 @@
  */
 
 import { getDibaAcronymSummary } from "./acronym.js";
+import {
+  DIBA_ADVANCED_FEATURES,
+  DIBA_FEATURE_SYSTEMS,
+  DIBA_SPECIALIZATIONS,
+} from "./capabilities.js";
 import { DibaMemoryStore } from "./memory.js";
 import type { DibaContext, LearnInput, MemoryEntry, RecallResult } from "./types.js";
 
@@ -31,6 +36,21 @@ export class Diba {
   /** Capability summary: name, tagline, acronym, and DIBA letters. */
   getCapability() {
     return getDibaAcronymSummary();
+  }
+
+  /** Specializations: Professional, Educational, Creative, Personal, Technical. */
+  getSpecializations() {
+    return DIBA_SPECIALIZATIONS;
+  }
+
+  /** Advanced features: Auto-Archive, Session RAM, Protocol System, Self-Update, Modular Design, Save Diary, Echo Recall. */
+  getAdvancedFeatures() {
+    return DIBA_ADVANCED_FEATURES;
+  }
+
+  /** Feature systems: Save Diary System, Echo Memory Recall (paths in Feature/). */
+  getFeatureSystems() {
+    return DIBA_FEATURE_SYSTEMS;
   }
 
   /** Learn a fact (Dynamic Learning + Brain-like Memory). */
