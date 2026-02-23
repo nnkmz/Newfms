@@ -29,7 +29,13 @@ export const DIBA_SPECIALIZATIONS: readonly DibaSpecialization[] = [
   },
   {
     area: "Technical",
-    focus: ["Code review", "Troubleshooting", "System design"],
+    focus: [
+      "Code review",
+      "Troubleshooting",
+      "System design",
+      "Code development (pelbagai bahasa)",
+      "Multi-language programming",
+    ],
   },
 ] as const;
 
@@ -72,6 +78,12 @@ export const DIBA_ADVANCED_FEATURES: readonly DibaAdvancedFeature[] = [
     name: "Modular Design",
     description: "Add or remove features as needed.",
     descriptionMs: "Tambah atau buang ciri mengikut keperluan.",
+  },
+  {
+    id: "multi-language-code-dev",
+    name: "Multi-Language Code Development",
+    description: "Develop and write code in multiple programming languages (TypeScript, JavaScript, Python, Go, Rust, Java, C#, Ruby, PHP, SQL, shell, etc.).",
+    descriptionMs: "Membangun dan menulis kod aturcara dalam pelbagai bahasa (TypeScript, JavaScript, Python, Go, Rust, Java, C#, Ruby, PHP, SQL, shell, dll.).",
   },
   {
     id: "save-diary-system",

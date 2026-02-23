@@ -25,7 +25,7 @@ DIBA boleh mengkhusus dalam domain berikut:
 | **Educational** | Tutoring, study assistance, curriculum development |
 | **Creative** | Writing support, brainstorming, artistic collaboration |
 | **Personal** | Life coaching, goal tracking, decision support |
-| **Technical** | Code review, troubleshooting, system design |
+| **Technical** | Code review, troubleshooting, system design, code development (pelbagai bahasa), multi-language programming |
 
 ## Ciri lanjutan (Advanced Features)
 
