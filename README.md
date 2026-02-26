@@ -154,6 +154,17 @@ Dalam repo ini, DIBA ada **skill** dan **rule** untuk Cursor:
 
 Ini memastikan AI dalam Cursor ikut amalan pro bila bekerja dengan kod DIBA.
 
+## MCP (Model Context Protocol)
+
+Dalam repo ini sudah disediakan **.cursor/mcp.json** dengan server MCP percuma yang berguna:
+
+| Server | Fungsi |
+|--------|--------|
+| **filesystem** | Baca, tulis, cari fail dalam projek (direktori dibenarkan: `.` = akar projek) |
+| **memory** | Memori berterusan berasaskan knowledge graph untuk AI |
+
+Selepas ubah `mcp.json`, **mulakan semula Cursor** supaya MCP dimuat. Dalam chat, AI boleh guna tools filesystem dan memory bila perlu. Untuk hadkan filesystem ke path lain, tukar argumen `"."` dalam `args` kepada path penuh folder yang dibenarkan.
+
 ---
 
 ## Struktur Projek
