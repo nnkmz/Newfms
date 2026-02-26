@@ -145,6 +145,69 @@ const diba = new Diba({
 });
 ```
 
+## Integrasi FPX untuk eRuangNiaga (starter)
+
+Repo ini kini ada modul starter FPX di `src/fpx/` untuk aliran pembayaran:
+
+1. Cipta checkout session (signed payload)
+2. Redirect pengguna ke gateway FPX (POST form)
+3. Terima callback dan verify signature
+4. Kemas kini status order (`paid`, `pending`, `failed`)
+
+### API yang disediakan
+
+- `EruangniagaFpxService`
+- `buildAutoPostForm`
+- Utility checksum: `signFpxPayload`, `verifyFpxSignature`
+
+### Contoh penggunaan ringkas
+
+```ts
+import { EruangniagaFpxService, buildAutoPostForm } from "diba-ai-memory-helper";
+
+const fpx = new EruangniagaFpxService({
+  merchantId: "ERUANGNIAGA001",
+  gatewayBaseUrl: "https://gateway-anda.example.com",
+  checkoutPath: "/checkout",
+  callbackUrl: "https://eruangniaga.uitm.edu.my/api/payment/fpx/callback",
+  returnUrl: "https://eruangniaga.uitm.edu.my/payment/result",
+  checksumSecret: "GANTI_DENGAN_SECRET_SEBENAR",
+});
+
+const checkout = fpx.createCheckoutSession({
+  orderId: "ERG-2026-000123",
+  amount: 120.5,
+  description: "Bayaran tempahan ruang seminar",
+  payerName: "Ali Bin Abu",
+  payerEmail: "ali@example.com",
+});
+
+const html = buildAutoPostForm({
+  actionUrl: checkout.redirectUrl,
+  fields: checkout.formFields,
+});
+```
+
+### Contoh callback verification
+
+```ts
+const result = fpx.verifyCallback({
+  transaction_id: "FPX-ERG2026000123-ABC123XYZ789",
+  order_id: "ERG-2026-000123",
+  amount: "120.50",
+  status: "00",
+  checksum: "signature-dari-gateway",
+});
+
+if (result.isSignatureValid && result.status === "paid") {
+  // update order kepada PAID dalam DB
+}
+```
+
+> Nota: Nama field callback/checksum boleh berbeza ikut provider FPX. Modul ini sediakan struktur asas yang boleh dipadankan dengan field sebenar gateway anda.
+>
+> Contoh aliran backend penuh: [examples/eruangniaga-fpx-integration.md](./examples/eruangniaga-fpx-integration.md).
+
 ## Cursor (pro developer)
 
 Dalam repo ini, DIBA ada **skill** dan **rule** untuk Cursor:
@@ -182,6 +245,12 @@ src/
     memory.ts       # DibaMemoryStore: learn, recall, persist
     Diba.ts         # Kelas Diba: capability + memory API
     index.ts        # Public API
+  fpx/
+    types.ts        # Jenis untuk config, checkout session, callback result
+    checksum.ts     # Utility checksum/signature (HMAC SHA256)
+    form.ts         # Builder auto-submit HTML form untuk redirect FPX
+    EruangniagaFpxService.ts # Servis create checkout + verify callback
+    index.ts        # Public API modul FPX
   index.ts          # Entry point & export
 ```
 
