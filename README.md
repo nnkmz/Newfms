@@ -154,6 +154,10 @@ Dalam repo ini, DIBA ada **skill** dan **rule** untuk Cursor:
 
 Ini memastikan AI dalam Cursor ikut amalan pro bila bekerja dengan kod DIBA.
 
+**DIBA auto bila masuk:** Bila anda buka projek Newfms dalam Cursor, DIBA sudah aktif dalam chat; bila anda buka tab chat dan mulakan perbualan, AI akan menyapa sebagai Diba. Untuk papar intro DIBA di terminal: jalankan task **DIBA** (Terminal → Run Task → DIBA) atau `npm start`.
+
+**DIBA untuk semua projek:** Skill DIBA telah dipasang di **peringkat pengguna** (`~/.cursor/skills/`) supaya DIBA boleh jalan dalam **semua projek** bila anda log masuk Cursor. Untuk rule "bertindak sebagai Diba" merentasi semua projek, salin teks dari `docs/DIBA-USER-RULE-Salin-ke-Cursor.md` ke Cursor → Settings → Rules → User Rules. Tip latihan AI: lihat `docs/Effective-AI-Training-DIBA.md` (Be Specific, Give Examples, Consistent Language, Provide Feedback).
+
 ## MCP (Model Context Protocol)
 
 Dalam repo ini sudah disediakan **.cursor/mcp.json** dengan server MCP percuma yang berguna:
