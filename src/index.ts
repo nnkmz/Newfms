@@ -19,3 +19,12 @@ function main(): void {
 main();
 
 export { Diba, getDibaAcronymSummary } from "./diba/index.js";
+export { EruangniagaFpxService, buildAutoPostForm } from "./fpx/index.js";
+export type {
+  BuildAutoPostFormInput,
+  CreateFpxCheckoutInput,
+  EruangniagaFpxConfig,
+  FpxCheckoutSession,
+  FpxPaymentStatus,
+  VerifyFpxCallbackResult,
+} from "./fpx/index.js";
