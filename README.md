@@ -98,6 +98,30 @@ Panduan terperinci: [examples/use-in-another-project.md](./examples/use-in-anoth
 
 ---
 
+## UiTM eWorks Facilities SaaS (MVP+)
+
+Repo ini kini mengandungi modul pemodenan e-Aduan/eWorks UiTM dengan 3 komponen utama:
+
+1. **PostgreSQL schema**: `database/eworks-postgres-schema.sql`
+2. **JWT auth + role policy**: `src/eworks-saas/auth.ts`, `src/eworks-saas/server.ts`
+3. **Frontend portal demo**: `public/eworks/` (akses di `/portal`)
+
+Jalankan:
+
+```bash
+npm run build
+npm run start:eworks
+```
+
+Akses:
+
+- API: `http://localhost:8080`
+- Portal: `http://localhost:8080/portal`
+
+Dokumentasi penuh: `docs/UITM-eWorks-SaaS-MVP.md`
+
+---
+
 ## Pemasangan (dalam repo Newfms ini)
 
 ```bash
