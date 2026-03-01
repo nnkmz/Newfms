@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ms">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UiTM eWorks SaaS Portal (Demo)</title>
+    <link rel="stylesheet" href="/portal/styles.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <h1>UiTM eWorks Facilities SaaS</h1>
+      <p>Portal demo untuk aduan fasiliti, work order, dan dashboard operasi.</p>
+    </header>
+
+    <main class="layout">
+      <section class="card auth-card">
+        <h2>Login (JWT)</h2>
+        <form id="login-form" class="stack">
+          <label>
+            Tenant ID
+            <input name="tenantId" value="uitm" required />
+          </label>
+          <label>
+            Username
+            <input name="username" value="admin" required />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" value="admin123!" required />
+          </label>
+          <button type="submit">Login</button>
+        </form>
+        <p class="hint">
+          Akaun demo: admin/admin123! · helpdesk/helpdesk123! · technician/tech123! · requestor/requestor123!
+        </p>
+        <div class="auth-state" id="auth-state">Belum login.</div>
+      </section>
+
+      <section class="card">
+        <h2>Cipta Aduan</h2>
+        <form id="complaint-form" class="grid-2">
+          <label>Requestor Type
+            <select name="requestorType">
+              <option value="staff">staff</option>
+              <option value="student" selected>student</option>
+              <option value="external">external</option>
+            </select>
+          </label>
+          <label>Identifier
+            <input name="identifier" value="2000111234" required />
+          </label>
+          <label>Nama
+            <input name="fullName" value="Ali UiTM" />
+          </label>
+          <label>Email
+            <input name="email" value="ali@student.uitm.edu.my" />
+          </label>
+          <label>Telefon
+            <input name="phone" value="0123456789" />
+          </label>
+          <label>Kampus
+            <input name="campus" value="UiTM Shah Alam" required />
+          </label>
+          <label>Bangunan
+            <input name="building" value="Bangunan Akademik A" required />
+          </label>
+          <label>Aras
+            <input name="floor" value="Aras 2" />
+          </label>
+          <label>Ruang
+            <input name="room" value="Bilik B-2-03" />
+          </label>
+          <label>Lokasi Kerosakan
+            <input name="locationDescription" value="Penyaman udara tidak sejuk" required />
+          </label>
+          <label>Seksyen
+            <input name="section" value="MEKANIKAL" required />
+          </label>
+          <label>Elemen
+            <input name="element" value="PENYAMAN UDARA" required />
+          </label>
+          <label>Jenis Masalah
+            <input name="problemType" value="TIDAK SEJUK" required />
+          </label>
+          <label>Prioriti
+            <select name="priority">
+              <option value="low">low</option>
+              <option value="medium">medium</option>
+              <option value="high" selected>high</option>
+              <option value="critical">critical</option>
+            </select>
+          </label>
+          <label>Channel
+            <select name="channel">
+              <option value="online" selected>online</option>
+              <option value="phone">phone</option>
+              <option value="walk_in">walk_in</option>
+            </select>
+          </label>
+          <label class="full">Keterangan Aduan
+            <textarea name="description" rows="3">Aircond bilik kuliah tidak sejuk sejak pagi.</textarea>
+          </label>
+          <button type="submit" class="full">Hantar Aduan</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Operasi Aduan</h2>
+        <div class="row">
+          <button id="btn-list-complaints" type="button">Muat Senarai Aduan</button>
+          <button id="btn-dashboard" type="button">Muat Dashboard</button>
+        </div>
+        <form id="complaint-status-form" class="grid-2">
+          <label>Complaint ID
+            <input name="complaintId" placeholder="cmp_xxx" required />
+          </label>
+          <label>Status
+            <select name="status">
+              <option value="triaged">triaged</option>
+              <option value="assigned">assigned</option>
+              <option value="in_progress">in_progress</option>
+              <option value="on_hold">on_hold</option>
+              <option value="resolved">resolved</option>
+              <option value="rejected">rejected</option>
+              <option value="cancelled">cancelled</option>
+              <option value="closed">closed</option>
+            </select>
+          </label>
+          <label class="full">Nota
+            <input name="note" placeholder="Nota kemaskini status" />
+          </label>
+          <button type="submit" class="full">Kemaskini Status Aduan</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Work Order</h2>
+        <form id="work-order-form" class="grid-2">
+          <label>Complaint ID
+            <input name="complaintId" placeholder="cmp_xxx" required />
+          </label>
+          <label>Tajuk
+            <input name="title" value="Semak unit aircond blok akademik" required />
+          </label>
+          <label>Pasukan
+            <input name="team" value="Pasukan Mekanikal" required />
+          </label>
+          <label>Assignee ID
+            <input name="assigneeId" value="tech-101" />
+          </label>
+          <label class="full">Jadual (ISO)
+            <input name="scheduledAt" value="2026-03-02T09:00:00.000Z" />
+          </label>
+          <button type="submit" class="full">Cipta Work Order</button>
+        </form>
+
+        <form id="work-order-status-form" class="grid-2">
+          <label>Work Order ID
+            <input name="workOrderId" placeholder="wo_xxx" required />
+          </label>
+          <label>Status
+            <select name="status">
+              <option value="scheduled">scheduled</option>
+              <option value="in_progress">in_progress</option>
+              <option value="completed">completed</option>
+              <option value="cancelled">cancelled</option>
+            </select>
+          </label>
+          <label class="full">Nota
+            <input name="note" placeholder="Nota status work order" />
+          </label>
+          <button type="submit" class="full">Kemaskini Status Work Order</button>
+        </form>
+      </section>
+
+      <section class="card output-card">
+        <h2>Output API</h2>
+        <pre id="output"></pre>
+      </section>
+    </main>
+
+    <script type="module" src="/portal/app.js"></script>
+  </body>
+</html>

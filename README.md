@@ -98,23 +98,27 @@ Panduan terperinci: [examples/use-in-another-project.md](./examples/use-in-anoth
 
 ---
 
-## UiTM eWorks Facilities SaaS (MVP API)
+## UiTM eWorks Facilities SaaS (MVP+)
 
-Repo ini kini mengandungi modul MVP backend untuk pemodenan e-Aduan/eWorks UiTM (multi-tenant):
+Repo ini kini mengandungi modul pemodenan e-Aduan/eWorks UiTM dengan 3 komponen utama:
 
-- Kod: `src/eworks-saas/`
-- Dokumentasi: `docs/UITM-eWorks-SaaS-MVP.md`
-- Jalankan server API:
-  ```bash
-  npm run build
-  npm run start:eworks
-  ```
+1. **PostgreSQL schema**: `database/eworks-postgres-schema.sql`
+2. **JWT auth + role policy**: `src/eworks-saas/auth.ts`, `src/eworks-saas/server.ts`
+3. **Frontend portal demo**: `public/eworks/` (akses di `/portal`)
 
-Endpoint utama:
+Jalankan:
 
-- `POST /api/v1/complaints` (lapor aduan)
-- `POST /api/v1/work-orders` (buka tugasan teknikal)
-- `GET /api/v1/dashboard/summary` (ringkasan operasi/SLA)
+```bash
+npm run build
+npm run start:eworks
+```
+
+Akses:
+
+- API: `http://localhost:8080`
+- Portal: `http://localhost:8080/portal`
+
+Dokumentasi penuh: `docs/UITM-eWorks-SaaS-MVP.md`
 
 ---
 

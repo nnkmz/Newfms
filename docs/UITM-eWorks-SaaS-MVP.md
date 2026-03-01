@@ -1,24 +1,47 @@
-# UiTM eWorks Facilities SaaS (MVP API)
+# UiTM eWorks Facilities SaaS (MVP+)
 
-Dokumen ini menerangkan MVP backend untuk pemodenan sistem e-Aduan/eWorks fasiliti UiTM dengan pendekatan SaaS multi-tenant.
+Dokumen ini menerangkan implementasi semasa untuk backend + auth + portal demo bagi pemodenan sistem e-Aduan/eWorks UiTM.
 
-## Matlamat MVP
+## Ciri Yang Sudah Dibina
 
-- Menyokong **aduan fasiliti** (staff, student, external).
-- Menyokong **work order** untuk pasukan teknikal.
-- Menyediakan **dashboard ringkas** (status aduan, SLA overdue, status work order).
-- Menyokong model **multi-tenant** melalui header `x-tenant-id`.
+1. **DB schema PostgreSQL**
+   - Fail: `database/eworks-postgres-schema.sql`
+   - Jadual: `tenants`, `app_users`, `complaints`, `complaint_status_history`, `complaint_feedback`, `work_orders`, `work_order_status_history`
+   - Index untuk status/campus/carien JSONB.
+
+2. **Auth JWT + role policy**
+   - Endpoint login: `POST /api/v1/auth/login`
+   - Semua endpoint `/api/v1/*` (kecuali login) memerlukan:
+     - `Authorization: Bearer <token>`
+     - `x-tenant-id`
+   - Role policy:
+     - `helpdesk|technician|admin` untuk operasi status/work order
+     - `helpdesk|admin` untuk dashboard.
+
+3. **Frontend portal demo**
+   - URL: `GET /portal`
+   - Fail static: `public/eworks/`
+   - Fungsi: login, create complaint, list complaint, create/update work order, dashboard.
 
 ## Struktur Kod
 
 ```
+database/
+  eworks-postgres-schema.sql
+
+public/eworks/
+  index.html
+  app.js
+  styles.css
+
 src/eworks-saas/
-  types.ts      # model domain & jenis input/output
-  metadata.ts   # metadata helpdesk kampus UiTM
-  store.ts      # in-memory tenant store (MVP)
-  service.ts    # logik bisnes, validasi, status transition, SLA
-  server.ts     # HTTP API routes
-  index.ts      # eksport modul
+  auth.ts      # JWT login/verify + seed user demo
+  metadata.ts  # metadata helpdesk kampus UiTM
+  postgres.ts  # optional postgres mirror (DATABASE_URL)
+  service.ts   # business logic aduan/work order/SLA
+  server.ts    # API routes + auth guard + static portal
+  store.ts     # in-memory store
+  types.ts     # domain types
 ```
 
 ## Cara Jalankan
@@ -29,144 +52,111 @@ npm run build
 npm run start:eworks
 ```
 
-API akan berjalan di:
+Server:
+- API: `http://localhost:8080`
+- Portal: `http://localhost:8080/portal`
 
-`http://localhost:8080`
+## Konfigurasi Environment
 
-## Header Wajib
+- `PORT` (pilihan, default `8080`)
+- `EWORKS_JWT_SECRET` (sangat disyorkan untuk production)
+- `DATABASE_URL` (pilihan; jika diisi, server akan hydrate + persist ke PostgreSQL)
+- `EWORKS_AUTH_USERS_JSON` (pilihan; override akaun demo)
 
-Untuk semua route `/api/v1/*`:
+## Setup PostgreSQL
 
-- `x-tenant-id: uitm` (atau mana-mana tenant id lain)
+Jalankan migration schema:
 
-Header pilihan:
+```bash
+psql "$DATABASE_URL" -f database/eworks-postgres-schema.sql
+```
 
-- `x-user-role: requestor | helpdesk | technician | admin`
-- `x-user-id: <id pengguna>`
+> Nota: tanpa `DATABASE_URL`, server guna in-memory sahaja.
+
+## Akaun Demo (default)
+
+- `admin / admin123!`
+- `helpdesk / helpdesk123!`
+- `technician / tech123!`
+- `requestor / requestor123!`
+
+Tenant default: `uitm`.
 
 ## Endpoint Ringkas
 
 ### Health
+- `GET /health`
 
-`GET /health`
+### Auth
+- `POST /api/v1/auth/login`
+- `GET /api/v1/auth/me`
 
 ### Metadata
-
-`GET /api/v1/metadata/helpdesks`
+- `GET /api/v1/metadata/helpdesks`
 
 ### Aduan
-
 - `GET /api/v1/complaints`
 - `POST /api/v1/complaints`
 - `GET /api/v1/complaints/:complaintId`
-- `PATCH /api/v1/complaints/:complaintId/status` *(role: helpdesk/technician/admin)*
+- `PATCH /api/v1/complaints/:complaintId/status` *(helpdesk/technician/admin)*
 - `POST /api/v1/complaints/:complaintId/feedback`
 
 ### Work Order
-
 - `GET /api/v1/work-orders`
-- `POST /api/v1/work-orders` *(role: helpdesk/technician/admin)*
-- `PATCH /api/v1/work-orders/:workOrderId/status` *(role: helpdesk/technician/admin)*
+- `POST /api/v1/work-orders` *(helpdesk/technician/admin)*
+- `PATCH /api/v1/work-orders/:workOrderId/status` *(helpdesk/technician/admin)*
 
 ### Dashboard
+- `GET /api/v1/dashboard/summary` *(helpdesk/admin)*
 
-- `GET /api/v1/dashboard/summary` *(role: helpdesk/admin)*
+## Contoh cURL (aliran penuh)
 
-## Contoh cURL
+### 1) Login dan simpan token
 
-### 1) Cipta aduan baru
+```bash
+TOKEN=$(curl -s -X POST "http://localhost:8080/api/v1/auth/login" \
+  -H "content-type: application/json" \
+  -d '{"tenantId":"uitm","username":"admin","password":"admin123!"}' | jq -r '.accessToken')
+```
+
+### 2) Cipta aduan
 
 ```bash
 curl -X POST "http://localhost:8080/api/v1/complaints" \
   -H "content-type: application/json" \
   -H "x-tenant-id: uitm" \
-  -H "x-user-role: requestor" \
-  -H "x-user-id: 2000111234" \
+  -H "authorization: Bearer $TOKEN" \
   -d '{
     "requestorType": "student",
-    "reporter": {
-      "identifier": "2000111234",
-      "fullName": "Ali UiTM",
-      "email": "ali@student.uitm.edu.my",
-      "phone": "0123456789"
-    },
+    "reporter": { "identifier": "2000111234", "fullName": "Ali UiTM" },
     "location": {
       "state": "Selangor",
       "campus": "UiTM Shah Alam",
       "building": "Bangunan Akademik A",
-      "floor": "Aras 2",
-      "room": "Bilik B-2-03",
-      "locationDescription": "Penyaman udara tidak sejuk",
-      "coordinates": { "lat": 3.0738, "lng": 101.5183 }
+      "locationDescription": "Penyaman udara tidak sejuk"
     },
     "issue": {
       "section": "MEKANIKAL",
       "element": "PENYAMAN UDARA",
       "problemType": "TIDAK SEJUK"
     },
-    "description": "Aircond bilik kuliah tidak sejuk sejak pagi.",
-    "priority": "high",
-    "channel": "online"
+    "description": "Aircond bilik kuliah tidak sejuk sejak pagi."
   }'
 ```
 
-### 2) Cipta work order dari aduan
-
-```bash
-curl -X POST "http://localhost:8080/api/v1/work-orders" \
-  -H "content-type: application/json" \
-  -H "x-tenant-id: uitm" \
-  -H "x-user-role: helpdesk" \
-  -H "x-user-id: hd-001" \
-  -d '{
-    "complaintId": "cmp_xxx",
-    "title": "Semak unit aircond blok akademik",
-    "team": "Pasukan Mekanikal",
-    "assigneeId": "tech-101",
-    "scheduledAt": "2026-03-02T09:00:00.000Z"
-  }'
-```
-
-### 3) Kemaskini status work order
-
-```bash
-curl -X PATCH "http://localhost:8080/api/v1/work-orders/wo_xxx/status" \
-  -H "content-type: application/json" \
-  -H "x-tenant-id: uitm" \
-  -H "x-user-role: technician" \
-  -H "x-user-id: tech-101" \
-  -d '{
-    "status": "completed",
-    "note": "Kompresor dibersihkan dan gas ditambah."
-  }'
-```
-
-### 4) Lihat dashboard
+### 3) Dashboard
 
 ```bash
 curl "http://localhost:8080/api/v1/dashboard/summary" \
   -H "x-tenant-id: uitm" \
-  -H "x-user-role: admin"
+  -H "authorization: Bearer $TOKEN"
 ```
 
-## Risiko MVP & Mitigasi Cadangan
+## Risiko Semasa & Mitigasi
 
-1. **Data tidak kekal (in-memory sahaja)**  
-   - Mitigasi: migrasi ke PostgreSQL + ORM (Prisma/Drizzle) pada fasa seterusnya.
-
-2. **Tiada autentikasi sebenar (header-based role sahaja)**  
-   - Mitigasi: integrasi SSO UiTM/OAuth2 + JWT + RBAC policy.
-
-3. **Tiada audit trail lengkap enterprise**  
-   - Mitigasi: tambah event log append-only untuk setiap transition.
-
-4. **Tiada attachment/gambar kerosakan**  
-   - Mitigasi: integrasi object storage (S3 compatible) dan pre-signed upload.
-
-## Fasa Seterusnya (Disyorkan)
-
-1. Multi-tenant DB schema + migration.
-2. Frontend portal (requestor + helpdesk + technician).
-3. SLA engine + notifikasi (email/WhatsApp/Telegram).
-4. Analitik kampus (MTTR, first response time, backlog aging).
-5. Integrasi GIS/peta bilik dan aset.
+1. **JWT secret mungkin default jika env tidak diset**
+   - Mitigasi: set `EWORKS_JWT_SECRET` yang panjang/unik.
+2. **Mirror Postgres bukan multi-node distributed-safe**
+   - Mitigasi: migrasi ke repository DB native (query-first/ORM) pada fasa production.
+3. **Portal masih demo (vanilla JS, tanpa design system)**
+   - Mitigasi: naik taraf ke SPA production + RBAC UI + testing e2e.

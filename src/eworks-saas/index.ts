@@ -1,7 +1,10 @@
 export { EworksInMemoryStore } from "./store.js";
 export { DomainError, EworksFacilityService } from "./service.js";
 export { createEworksServer, startEworksServer } from "./server.js";
+export { EworksAuthService } from "./auth.js";
+export { EworksPostgresMirror, createPostgresMirrorFromEnv } from "./postgres.js";
 export { UITM_CAMPUS_HELPDESKS, UITM_TENANT_ID } from "./metadata.js";
+export type { AuthenticatedUser, AuthTokenPayload, LoginInput, LoginResult } from "./auth.js";
 export type {
   ApiErrorPayload,
   ComplaintChannel,
