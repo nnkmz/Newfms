@@ -98,6 +98,26 @@ Panduan terperinci: [examples/use-in-another-project.md](./examples/use-in-anoth
 
 ---
 
+## UiTM eWorks Facilities SaaS (MVP API)
+
+Repo ini kini mengandungi modul MVP backend untuk pemodenan e-Aduan/eWorks UiTM (multi-tenant):
+
+- Kod: `src/eworks-saas/`
+- Dokumentasi: `docs/UITM-eWorks-SaaS-MVP.md`
+- Jalankan server API:
+  ```bash
+  npm run build
+  npm run start:eworks
+  ```
+
+Endpoint utama:
+
+- `POST /api/v1/complaints` (lapor aduan)
+- `POST /api/v1/work-orders` (buka tugasan teknikal)
+- `GET /api/v1/dashboard/summary` (ringkasan operasi/SLA)
+
+---
+
 ## Pemasangan (dalam repo Newfms ini)
 
 ```bash
